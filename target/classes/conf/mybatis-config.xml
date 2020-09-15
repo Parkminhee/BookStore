@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org/DTD Config 3.0/EN" 
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+	
+<configuration>
+	<typeAliases>
+		<typeAlias type="kw.user.UserVO" alias="user" />
+		<typeAlias type="kw.book.BookVO" alias="book" />
+		<typeAlias type="kw.cart.CartVO" alias="cart" />
+		<typeAlias type="kw.order.OrderVO" alias="order" />
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="conf/sql-user.xml" />
+		<mapper resource="conf/sql-book.xml" />
+		<mapper resource="conf/sql-cart.xml" />
+		<mapper resource="conf/sql-order.xml" />
+	</mappers>
+</configuration>

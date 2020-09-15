@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="book">
+	<resultMap type="book" id="bookResult">
+		<result property="bookNum" column="BOOK_NUM" />
+		<result property="bookName" column="TITLE" />
+		<result property="bookWriter" column="WRITER" />
+		<result property="bookPublish" column="PUBLISH" />
+		<result property="bookPrice" column="PRICE" />
+		<result property="bookCount" column="COUNT" />
+	</resultMap>
+	
+	<insert id="createBook" parameterType="book">
+		<![CDATA[
+			INSERT INTO TB_BOOK(
+				TITLE,
+				WRITER,
+				PUBLISH,
+				PRICE,
+				COUNT
+			) VALUES (
+				#{bookName},
+				#{bookWriter},
+				#{bookPublish},
+				#{bookPrice},
+				#{bookCount}
+			)
+		]]>
+	</insert>
+	
+	<select id="retrieveBook" parameterType="map" resultMap="bookResult">
+		<![CDATA[
+			SELECT * FROM TB_BOOK WHERE BOOK_NUM = #{bookNum}
+		]]>
+	</select>
+	
+	<select id="retrieveBookList" resultMap="bookResult">
+		<![CDATA[
+			SELECT * FROM TB_BOOK;
+		]]>
+	</select>
+	
+	<update id="updateBook" parameterType="map">
+		<![CDATA[
+			UPDATE TB_BOOK
+			SET TITLE = #{bookName},
+				WRITER = #{bookWriter},
+				PUBLISH = #{bookPublish},
+				PRICE = #{bookPrice},
+				COUNT = #{bookCount}
+			WHERE BOOK_NUM = #{bookNum}
+		]]>
+	</update>
+	
+	<update id="updateBookCountMinus" parameterType="map">
+		<![CDATA[
+			UPDATE TB_BOOK
+			SET COUNT = COUNT - #{bookCount}
+			WHERE BOOK_NUM = #{bookNum}
+		]]>
+	</update>
+	
+	<update id="updateBookCountPlus" parameterType="map">
+		<![CDATA[
+			UPDATE TB_BOOK
+			SET COUNT = COUNT + ${bookCount}
+			WHERE BOOK_NUM = #{bookNum}
+		]]>
+	</update>
+</mapper>

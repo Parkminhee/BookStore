@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cart">
+	<resultMap id="cartResult" type="cart">
+		<result property="cartNum" column="SEQ" />
+		<result property="id" column="ID" />
+		<result property="bookNum" column="BOOK_NUM" />
+		<result property="cartPrice" column="CART_PRICE" />
+		<result property="cartCount" column="CART_COUNT" />
+		<result property="cartRegDate" column="CART_REG_DATE" />
+	</resultMap>
+	
+	<insert id="createCart" parameterType="map">
+		<![CDATA[
+			INSERT INTO TB_CART(
+				ID,
+				BOOK_NUM,
+				CART_PRICE,
+				CART_COUNT,
+				CART_REG_DATE
+			) VALUES (
+				#{id},
+				#{bookNum},
+				#{cartPrice},
+				#{cartCount},
+				DATE_FORMAT(now(), '%Y-%m-%d %h:%i:%s')
+			)
+		]]>
+	</insert>
+	
+	<select id="checkCart" parameterType="map" resultType="int">
+		<![CDATA[
+			SELECT COUNT(*) FROM TB_CART WHERE ID = #{id} AND BOOK_NUM = #{bookNum}
+		]]>
+	</select>
+	
+	<select id="retrieveCart" parameterType="map" resultType="int">
+		<![CDATA[
+			SELECT SEQ FROM TB_CART WHERE ID = #{id} AND BOOK_NUM = #{bookNum}
+		]]>
+	</select>
+	
+	<select id="retrieveCartList" parameterType="map" resultType="map">
+		<![CDATA[
+			SELECT 
+				CART.SEQ,
+				CART.ID,
+				CART.BOOK_NUM,
+				CART.CART_PRICE,
+				CART.CART_COUNT,
+				CART.CART_REG_DATE,
+				BOOK.TITLE,
+				BOOK.WRITER,
+				BOOK.PRICE
+			FROM TB_CART CART
+				INNER JOIN TB_BOOK BOOK
+				ON BOOK.BOOK_NUM = CART.BOOK_NUM
+			WHERE ID = #{id}
+		]]>
+	</select>
+	
+	<update id="updateCart" parameterType="map">
+		<![CDATA[
+			UPDATE TB_CART
+			SET CART_COUNT = CART_COUNT + #{cartCount},
+				CART_PRICE = CART_PRICE + #{cartPrice}
+			WHERE SEQ = (#{cartNum}+0)
+		]]>
+	</update>
+	
+	<delete id="deleteCart" parameterType="map">
+		<![CDATA[
+			DELETE
+			FROM TB_CART
+			WHERE SEQ = #{cartNum}
+		]]>
+	</delete>
+</mapper>

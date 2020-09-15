@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user">
+	<resultMap id="userResult" type="user">
+		<result property="id" column="ID" />
+		<result property="pw" column="PW" />
+		<result property="email" column="EMAIL" />
+		<result property="name" column="NAME" />
+		<result property="postNum" column="POST_NUM" />
+		<result property="address" column="ADDRESS" />
+		<result property="phoneNum" column="PHONE_NUM" />
+		<result property="point" column="POINT" />
+		<result property="category" column="CATEGORY" />
+	</resultMap>
+	
+	<insert id="createUser" parameterType="user">
+		<![CDATA[
+			INSERT INTO TB_USER(
+				ID
+				, PW
+				, EMAIL
+				, NAME
+				, POST_NUM
+				, ADDRESS
+				, PHONE_NUM
+				) VALUES(
+					#{id}
+					, #{pw}
+					, #{email}
+					, #{name}
+					, #{postNum}
+					, #{address}
+					, #{phoneNum}
+				)
+		]]>
+	</insert>
+	
+	<select id="retrieveUser" resultMap="userResult" parameterType="string">
+		<![CDATA[
+			SELECT * FROM TB_USER WHERE ID = #{id}
+		]]>
+	</select>
+	
+	<select id="retrieveUserList" resultMap="userResult">
+		<![CDATA[
+			SELECT * FROM TB_USER;
+		]]>
+	</select>
+	
+	<select id="retrievePostByDong" resultType="map" parameterType="map">
+		<![CDATA[
+			SELECT SEQ
+				,ZIPCODE
+				,SIDO
+				,GUGUN
+				,DONG
+				,BUNJI
+			FROM TB_POST
+			WHERE DONG LIKE '%${dong}%'
+		]]>
+	</select>
+	
+	<select id="loginCheck" resultType="string" parameterType="map">
+		<![CDATA[
+			SELECT EMAIL 
+			FROM TB_USER 
+			WHERE ID = #{id} and PW = #{pw}
+		]]>
+	</select>
+	
+	<select id="retrieveSessionInfo" resultMap="userResult" parameterType="string">
+		<![CDATA[
+			SELECT ID, GRADE FROM TB_USER WHERE ID = #{id}
+		]]>
+	</select>
+	
+	<update id="updateUser" parameterType="user">
+		<![CDATA[
+			UPDATE TB_USER
+			SET PW = #{pw},
+				EMAIL = #{email},
+				NAME = #{name},
+				POST_NUM = #{postNum},
+				ADDRESS = #{address},
+				PHONE_NUM = #{phoneNum}
+			WHERE ID = #{id}
+		]]>
+	</update>
+</mapper>

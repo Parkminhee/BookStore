@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="order">
+	<resultMap id="orderResult" type="order">
+		<result property="orderNum" column="SEQ" />
+		<result property="bookNum" column="BOOK_NUM" />
+		<result property="id" column="ID" />
+		<result property="orderPrice" column="ORDER_PRICE" />
+		<result property="orderCount" column="ORDER_COUNT" />
+		<result property="orderDate" column="ORDER_DATE" />
+	</resultMap>
+	
+	<insert id="createOrder" parameterType="map">
+		<![CDATA[
+			INSERT INTO TB_ORDER(
+				BOOK_NUM,
+				ID,
+				ORDER_COUNT,
+				ORDER_PRICE,
+				ORDER_DATE
+			) VALUES(
+				#{bookNum},
+				#{id},
+				#{orderCount},
+				#{orderPrice},
+				DATE_FORMAT(now(), '%Y-%m-%d %h:%i:%s')
+			)
+		]]>
+	</insert>
+	
+	<select id="retrieveOrderListForCustomer" parameterType="map" resultType="map">
+		<![CDATA[
+			SELECT 
+				ORDER_TB.ID,
+				ORDER_TB.BOOK_NUM,
+				ORDER_TB.ORDER_COUNT,
+				ORDER_TB.ORDER_PRICE,
+				ORDER_TB.ORDER_DATE,
+				BOOK.TITLE,
+				BOOK.PRICE
+			FROM TB_ORDER ORDER_TB
+				INNER JOIN TB_BOOK BOOK
+				ON BOOK.BOOK_NUM = ORDER_TB.BOOK_NUM
+			WHERE ID = #{id}
+			ORDER BY ORDER_DATE DESC
+		]]>
+	</select>
+	
+	<select id="retrieveOrderListForManage" resultType="map">
+		<![CDATA[
+			SELECT 
+				ORDER_TB.ID,
+				ORDER_TB.BOOK_NUM,
+				ORDER_TB.ORDER_COUNT,
+				ORDER_TB.ORDER_PRICE,
+				ORDER_TB.ORDER_DATE,
+				BOOK.TITLE,
+				BOOK.PRICE
+			FROM TB_ORDER ORDER_TB
+				INNER JOIN TB_BOOK BOOK
+				ON BOOK.BOOK_NUM = ORDER_TB.BOOK_NUM
+			ORDER BY ORDER_DATE DESC
+		]]>
+	</select>
+</mapper>
